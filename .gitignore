@@ -294,3 +294,5 @@ __pycache__/
 .Trashes
 ehthumbs.db
 Thumbs.db
+node_modules
+.env
