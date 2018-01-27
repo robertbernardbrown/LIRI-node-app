@@ -1,0 +1,19 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "An app to search your Twitter, query Spotify and IMDB, and another special task TBD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertbernardbrown/LIRI-node-app.git"
+  },
+  "author": "Robert Brown",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robertbernardbrown/LIRI-node-app/issues"
+  },
+  "homepage": "https://github.com/robertbernardbrown/LIRI-node-app#readme"
+}
