@@ -34,18 +34,18 @@ switch (process.argv[2]) {
 
         if (!process.argv[3]) {
             spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
-            .then(function(data) {
-                spotObj = {
-                    artists: data.artists[0].name,
-                    songName: data.name,
-                    songLink: data.preview_url,
-                    album: data.album.name
-                }
-              console.log(spotObj); 
-            })
-            .catch(function(err) {
-              console.error('Error occurred: ' + err); 
-            });
+                .then(function (data) {
+                    spotObj = {
+                        artists: data.artists[0].name,
+                        songName: data.name,
+                        songLink: data.preview_url,
+                        album: data.album.name
+                    }
+                    console.log(spotObj);
+                })
+                .catch(function (err) {
+                    console.error('Error occurred: ' + err);
+                });
             break;
         }
 
@@ -82,8 +82,3 @@ switch (process.argv[2]) {
     default:
         console.log('Please enter a request!');
 }
-
-
-
-
-// console.log(client)
