@@ -5,7 +5,7 @@ var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
 //===========SPOTIFY=============
 var Spotify = require('node-spotify-api');
-var spotifyClient = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 //===========REQUEST=============
 var requestCall = require('request');
 
@@ -32,18 +32,43 @@ switch (process.argv[2]) {
     
     case 'spotify_this_song':
 
+        if (!process.argv[3]) {
+            spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
+            .then(function(data) {
+                spotObj = {
+                    artists: data.artists[0].name,
+                    songName: data.name,
+                    songLink: data.preview_url,
+                    album: data.album.name
+                }
+              console.log(spotObj); 
+            })
+            .catch(function(err) {
+              console.error('Error occurred: ' + err); 
+            });
+            break;
+        }
+
         var params = {
             type: 'track',
-            query: 'All the Small Things'
+            query: process.argv[3]
         };
-        spotifyClient.search(params, function (err, data) {
+        spotify.search(params, function (err, data) {
             if (err) {
                 return console.log('Error occurred: ' + err);
             }
             var spotifyArray = data.tracks.items;
+            var spotObj = {};
+            console.log('Here are some songs that fit the bill: ')
             for (var i = 0; i < spotifyArray.length; i++) {
-                var element = spotifyArray[i];
-                console.log(element);
+                var element = spotifyArray[i],
+                    spotObj = {
+                        artist: element.artists[0].name,
+                        songName: element.name,
+                        songLink: element.preview_url,
+                        album: element.album.name
+                    }
+                console.log(spotObj)
             }
         });
         break;
