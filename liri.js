@@ -68,14 +68,58 @@ switch (process.argv[2]) {
                         songLink: element.preview_url,
                         album: element.album.name
                     }
-                console.log(spotObj)
+                console.log(spotObj);
             }
         });
         break;
 
     case 'movie_this':
-        console.log('movie');
+
+        if (!process.argv[3]) {
+
+            requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=Mr.+Nobody', function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+
+                var parsedVar = JSON.parse(body);
+
+                var movieTitle = 'Title: ' + parsedVar.Title
+                var movieYear = 'Year: ' + parsedVar.Year
+                var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
+                var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
+                var movieCountry = 'Country: ' + parsedVar.Country
+                var movieLanguage = 'Language: ' + parsedVar.Language
+                var moviePlot = 'Plot: ' + parsedVar.Plot
+                var movieActors = 'Actors: ' + parsedVar.Actors
+
+                console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
+            });
+            break;
+        }
+
+        var userInput = process.argv[3];
+        var editInput = userInput.replace(/\s/g, '+');
+
+        console.log(editInput)
+        requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
+            console.log('error:', error); // Print the error if one occurred
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+
+            var parsedVar = JSON.parse(body);
+
+            var movieTitle = 'Title: ' + parsedVar.Title
+            var movieYear = 'Year: ' + parsedVar.Year
+            var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
+            var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
+            var movieCountry = 'Country: ' + parsedVar.Country
+            var movieLanguage = 'Language: ' + parsedVar.Language
+            var moviePlot = 'Plot: ' + parsedVar.Plot
+            var movieActors = 'Actors: ' + parsedVar.Actors
+
+            console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
+        });
         break;
+
     case 'do_what_it_says':
         console.log('says');
         break;
