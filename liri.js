@@ -31,8 +31,26 @@ switch (process.argv[2]) {
 
         fs.readFile(filename, 'utf8', function (err, data) {
             if (err) throw err;
-            console.log('OK: ' + filename);
-            console.log(data)
+
+            var newData = data.split(",")
+
+            switch (newData[0]) {
+
+                case 'my_tweets':
+                    tweets();
+                    break;
+
+                case 'spotify_this_song':
+                    spotifyFun(newData[1]);
+                    break;
+
+                case 'movie_this':
+                    movieFun(newData[1]);
+                    break;
+
+                default:
+                    console.log('Please enter text into the txt file')
+            }
         });
 
         break;
