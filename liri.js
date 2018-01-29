@@ -29,7 +29,11 @@ switch (process.argv[2]) {
         doIt();
         break;
     default:
-        console.log('Please enter a request!');
+        var errorComd = 'Please enter a command'
+        console.log(errorComd)
+        fs.appendFile('./log.txt', errorComd, 'utf-8', function (err) {
+            if (err) throw err;
+          });
 }
 
 function tweets() {
@@ -43,8 +47,11 @@ function tweets() {
             var counter = 1;
             for (var i = 0; i < tweets.length; i++) {
                 var element = tweets[i];
-                var twitterText = counter++ + '. ' + element.created_at + ' ' + element.text
+                var twitterText = counter++ + '. ' + element.created_at + ' ' + element.text + '\n'
                 console.log(twitterText);
+                fs.appendFile('./log.txt', twitterText, 'utf-8', function (err) {
+                    if (err) throw err;
+                  });
             }
         }
     });
@@ -60,7 +67,12 @@ function spotifyFun(arg) {
                     songLink: data.preview_url,
                     album: data.album.name
                 }
-                console.log(spotObj);
+                for (var i in spotObj) {
+                console.log(spotObj[i]);
+                fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
+                    if (err) throw err;
+                  });
+                }
             })
             .catch(function (err) {
                 console.error('Error occurred: ' + err);
@@ -88,7 +100,12 @@ function spotifyFun(arg) {
                     songLink: element.preview_url,
                     album: element.album.name
                 }
-            console.log(spotObj);
+                for (var i in spotObj) {
+                    console.log(spotObj[i]);
+                    fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
+                        if (err) throw err;
+                      });
+                    }
         }
     });
 }
@@ -100,16 +117,23 @@ function movieFun (arg) {
           
             var parsedVar = JSON.parse(body);
 
-            var movieTitle = 'Title: ' + parsedVar.Title
-            var movieYear = 'Year: ' + parsedVar.Year
-            var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
-            var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
-            var movieCountry = 'Country: ' + parsedVar.Country
-            var movieLanguage = 'Language: ' + parsedVar.Language
-            var moviePlot = 'Plot: ' + parsedVar.Plot
-            var movieActors = 'Actors: ' + parsedVar.Actors
+            var movieObj = {
+            movieTitle: 'Title: ' + parsedVar.Title,
+            movieYear: 'Year: ' + parsedVar.Year,
+            movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
+            movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
+            movieCountry: 'Country: ' + parsedVar.Country,
+            movieLanguage: 'Language: ' + parsedVar.Language,
+            moviePlot: 'Plot: ' + parsedVar.Plot,
+            movieActors: 'Actors: ' + parsedVar.Actors
+            }
 
-            console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
+            for (var i in movieObj) {
+                console.log(movieObj[i]);
+                fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
+                    if (err) throw err;
+                  });
+                }
         });
         return;
     }
@@ -126,18 +150,23 @@ function movieFun (arg) {
             return
         }
      
-        var movieTitle = 'Title: ' + parsedVar.Title
-        var movieYear = 'Year: ' + parsedVar.Year
-        var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
-        if (parsedVar.Ratings[1]) {
-        var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
+        var movieObj = {
+        movieTitle: 'Title: ' + parsedVar.Title,
+        movieYear: 'Year: ' + parsedVar.Year,
+        movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
+        movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
+        movieCountry: 'Country: ' + parsedVar.Country,
+        movieLanguage: 'Language: ' + parsedVar.Language,
+        moviePlot: 'Plot: ' + parsedVar.Plot,
+        movieActors: 'Actors: ' + parsedVar.Actors
         }
-        var movieCountry = 'Country: ' + parsedVar.Country
-        var movieLanguage = 'Language: ' + parsedVar.Language
-        var moviePlot = 'Plot: ' + parsedVar.Plot
-        var movieActors = 'Actors: ' + parsedVar.Actors
 
-        console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
+        for (var i in movieObj) {
+            console.log(movieObj[i]);
+            fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
+                if (err) throw err;
+              });
+            }
     });
 }
 
@@ -164,7 +193,11 @@ function doIt() {
                 break;
 
             default:
-                console.log('Please enter text into the txt file')
+                var errorTxt = 'Please enter text into the txt file'
+                console.log(errorTxt)
+                fs.appendFile('./log.txt', errorTxt, 'utf-8', function (err) {
+                    if (err) throw err;
+                  });
         }
     });
 
