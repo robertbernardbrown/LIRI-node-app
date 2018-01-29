@@ -49,9 +49,7 @@ function tweets() {
                 var element = tweets[i];
                 var twitterText = counter++ + '. ' + element.created_at + ' ' + element.text + '\n'
                 console.log(twitterText);
-                fs.appendFile('./log.txt', twitterText, 'utf-8', function (err) {
-                    if (err) throw err;
-                });
+                writeLog(twitterText)
             }
         }
     });
@@ -69,9 +67,7 @@ function spotifyFun(arg) {
                 }
                 for (var i in spotObj) {
                     console.log(spotObj[i]);
-                    fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
-                        if (err) throw err;
-                    });
+                    writeLog(spotObj[i])
                 }
             })
             .catch(function (err) {
@@ -102,9 +98,7 @@ function spotifyFun(arg) {
                 }
             for (var i in spotObj) {
                 console.log(spotObj[i]);
-                fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
-                    if (err) throw err;
-                });
+                writeLog(spotObj[i])
             }
         }
     });
@@ -130,9 +124,7 @@ function movieFun(arg) {
 
             for (var i in movieObj) {
                 console.log(movieObj[i]);
-                fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
-                    if (err) throw err;
-                });
+                writeLog(movieObj[i])
             }
         });
         return;
@@ -163,9 +155,7 @@ function movieFun(arg) {
 
         for (var i in movieObj) {
             console.log(movieObj[i]);
-            fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
-                if (err) throw err;
-            });
+            writeLog(movieObj[i])
         }
     });
 }
@@ -195,10 +185,14 @@ function doIt() {
             default:
                 var errorTxt = 'Please enter text into the txt file'
                 console.log(errorTxt)
-                fs.appendFile('./log.txt', errorTxt, 'utf-8', function (err) {
-                    if (err) throw err;
-                });
+                writeLog(errorTxt)
         }
     });
 
+}
+
+function writeLog (arg) {
+    fs.appendFile('./log.txt', arg + '\n', 'utf-8', function (err) {
+        if (err) throw err;
+    });
 }
