@@ -100,17 +100,23 @@ switch (process.argv[2]) {
         var userInput = process.argv[3];
         var editInput = userInput.replace(/\s/g, '+');
 
-        console.log(editInput)
         requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
             console.log('error:', error); // Print the error if one occurred
             console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 
             var parsedVar = JSON.parse(body);
 
+            if (parsedVar.Response === 'False') {
+                console.log("IMDB can't find this movie, please try again")
+                return
+            }
+         
             var movieTitle = 'Title: ' + parsedVar.Title
             var movieYear = 'Year: ' + parsedVar.Year
             var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
+            if (parsedVar.Ratings[1]) {
             var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
+            }
             var movieCountry = 'Country: ' + parsedVar.Country
             var movieLanguage = 'Language: ' + parsedVar.Language
             var moviePlot = 'Plot: ' + parsedVar.Plot
