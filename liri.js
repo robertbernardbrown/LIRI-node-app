@@ -16,7 +16,7 @@ switch (process.argv[2]) {
     case 'my_tweets':
         tweets();
         break;
-    
+
     case 'spotify_this_song':
         spotifyFun(process.argv[3]);
         break;
@@ -33,7 +33,7 @@ switch (process.argv[2]) {
         console.log(errorComd)
         fs.appendFile('./log.txt', errorComd, 'utf-8', function (err) {
             if (err) throw err;
-          });
+        });
 }
 
 function tweets() {
@@ -51,7 +51,7 @@ function tweets() {
                 console.log(twitterText);
                 fs.appendFile('./log.txt', twitterText, 'utf-8', function (err) {
                     if (err) throw err;
-                  });
+                });
             }
         }
     });
@@ -68,10 +68,10 @@ function spotifyFun(arg) {
                     album: data.album.name
                 }
                 for (var i in spotObj) {
-                console.log(spotObj[i]);
-                fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
-                    if (err) throw err;
-                  });
+                    console.log(spotObj[i]);
+                    fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
+                        if (err) throw err;
+                    });
                 }
             })
             .catch(function (err) {
@@ -100,40 +100,40 @@ function spotifyFun(arg) {
                     songLink: element.preview_url,
                     album: element.album.name
                 }
-                for (var i in spotObj) {
-                    console.log(spotObj[i]);
-                    fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
-                        if (err) throw err;
-                      });
-                    }
+            for (var i in spotObj) {
+                console.log(spotObj[i]);
+                fs.appendFile('./log.txt', spotObj[i] + '\n', 'utf-8', function (err) {
+                    if (err) throw err;
+                });
+            }
         }
     });
 }
 
-function movieFun (arg) {
+function movieFun(arg) {
     if (!arg) {
 
         requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=Mr.+Nobody', function (error, response, body) {
-          
+
             var parsedVar = JSON.parse(body);
 
             var movieObj = {
-            movieTitle: 'Title: ' + parsedVar.Title,
-            movieYear: 'Year: ' + parsedVar.Year,
-            movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
-            movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
-            movieCountry: 'Country: ' + parsedVar.Country,
-            movieLanguage: 'Language: ' + parsedVar.Language,
-            moviePlot: 'Plot: ' + parsedVar.Plot,
-            movieActors: 'Actors: ' + parsedVar.Actors
+                movieTitle: 'Title: ' + parsedVar.Title,
+                movieYear: 'Year: ' + parsedVar.Year,
+                movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
+                movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
+                movieCountry: 'Country: ' + parsedVar.Country,
+                movieLanguage: 'Language: ' + parsedVar.Language,
+                moviePlot: 'Plot: ' + parsedVar.Plot,
+                movieActors: 'Actors: ' + parsedVar.Actors
             }
 
             for (var i in movieObj) {
                 console.log(movieObj[i]);
                 fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
                     if (err) throw err;
-                  });
-                }
+                });
+            }
         });
         return;
     }
@@ -142,31 +142,31 @@ function movieFun (arg) {
     var editInput = userInput.replace(/\s/g, '+');
 
     requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
-     
+
         var parsedVar = JSON.parse(body);
 
         if (parsedVar.Response === 'False') {
             console.log("IMDB can't find this movie, please try again")
             return
         }
-     
+
         var movieObj = {
-        movieTitle: 'Title: ' + parsedVar.Title,
-        movieYear: 'Year: ' + parsedVar.Year,
-        movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
-        movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
-        movieCountry: 'Country: ' + parsedVar.Country,
-        movieLanguage: 'Language: ' + parsedVar.Language,
-        moviePlot: 'Plot: ' + parsedVar.Plot,
-        movieActors: 'Actors: ' + parsedVar.Actors
+            movieTitle: 'Title: ' + parsedVar.Title,
+            movieYear: 'Year: ' + parsedVar.Year,
+            movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
+            movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
+            movieCountry: 'Country: ' + parsedVar.Country,
+            movieLanguage: 'Language: ' + parsedVar.Language,
+            moviePlot: 'Plot: ' + parsedVar.Plot,
+            movieActors: 'Actors: ' + parsedVar.Actors
         }
 
         for (var i in movieObj) {
             console.log(movieObj[i]);
             fs.appendFile('./log.txt', movieObj[i] + '\n', 'utf-8', function (err) {
                 if (err) throw err;
-              });
-            }
+            });
+        }
     });
 }
 
@@ -197,7 +197,7 @@ function doIt() {
                 console.log(errorTxt)
                 fs.appendFile('./log.txt', errorTxt, 'utf-8', function (err) {
                     if (err) throw err;
-                  });
+                });
         }
     });
 
