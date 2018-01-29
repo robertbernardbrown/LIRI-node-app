@@ -26,39 +26,13 @@ switch (process.argv[2]) {
         break;
 
     case 'do_what_it_says':
-
-        var filename = 'random.txt'
-
-        fs.readFile(filename, 'utf8', function (err, data) {
-            if (err) throw err;
-
-            var newData = data.split(",")
-
-            switch (newData[0]) {
-
-                case 'my_tweets':
-                    tweets();
-                    break;
-
-                case 'spotify_this_song':
-                    spotifyFun(newData[1]);
-                    break;
-
-                case 'movie_this':
-                    movieFun(newData[1]);
-                    break;
-
-                default:
-                    console.log('Please enter text into the txt file')
-            }
-        });
-
+        doIt();
         break;
     default:
         console.log('Please enter a request!');
 }
 
-function tweets () {
+function tweets() {
     var params = {
         screen_name: 'Bob_Brown18',
         count: 20
@@ -165,4 +139,33 @@ function movieFun (arg) {
 
         console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
     });
+}
+
+function doIt() {
+    var filename = 'random.txt'
+
+    fs.readFile(filename, 'utf8', function (err, data) {
+        if (err) throw err;
+
+        var newData = data.split(",")
+
+        switch (newData[0]) {
+
+            case 'my_tweets':
+                tweets();
+                break;
+
+            case 'spotify_this_song':
+                spotifyFun(newData[1]);
+                break;
+
+            case 'movie_this':
+                movieFun(newData[1]);
+                break;
+
+            default:
+                console.log('Please enter text into the txt file')
+        }
+    });
+
 }
