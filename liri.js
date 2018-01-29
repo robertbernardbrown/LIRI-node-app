@@ -6,117 +6,112 @@ var client = new Twitter(keys.twitter);
 //===========SPOTIFY=============
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
-//===========REQUEST=============
+//=============IMDB==============
 var requestCall = require('request');
+//==============FS===============
+var fs = require('fs')
 
 switch (process.argv[2]) {
 
     case 'my_tweets':
-
-        var params = {
-            screen_name: 'Bob_Brown18',
-            count: 20
-        };
-        client.get('statuses/user_timeline', params, function (error, tweets, response) {
-            if (!error) {
-                console.log('Here are your last 20 tweets: ');
-                var counter = 1;
-                for (var i = 0; i < tweets.length; i++) {
-                    var element = tweets[i];
-                    var twitterText = counter++ + '. ' + element.created_at + ' ' + element.text
-                    console.log(twitterText);
-                }
-            }
-        });
+        tweets();
         break;
     
     case 'spotify_this_song':
-
-        if (!process.argv[3]) {
-            spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
-                .then(function (data) {
-                    spotObj = {
-                        artists: data.artists[0].name,
-                        songName: data.name,
-                        songLink: data.preview_url,
-                        album: data.album.name
-                    }
-                    console.log(spotObj);
-                })
-                .catch(function (err) {
-                    console.error('Error occurred: ' + err);
-                });
-            break;
-        }
-
-        var params = {
-            type: 'track',
-            query: process.argv[3]
-        };
-        spotify.search(params, function (err, data) {
-            if (err) {
-                return console.log('Error occurred: ' + err);
-            }
-            var spotifyArray = data.tracks.items;
-            var spotObj = {};
-            console.log('Here are some songs that fit the bill: ')
-            for (var i = 0; i < spotifyArray.length; i++) {
-                var element = spotifyArray[i],
-                    spotObj = {
-                        artist: element.artists[0].name,
-                        songName: element.name,
-                        songLink: element.preview_url,
-                        album: element.album.name
-                    }
-                console.log(spotObj);
-            }
-        });
+        spotifyFun(process.argv[3]);
         break;
 
     case 'movie_this':
+        movieFun(process.argv[3]);
+        break;
 
-        if (!process.argv[3]) {
+    case 'do_what_it_says':
 
-            requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=Mr.+Nobody', function (error, response, body) {
-                console.log('error:', error); // Print the error if one occurred
-                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        var filename = 'random.txt'
 
-                var parsedVar = JSON.parse(body);
+        fs.readFile(filename, 'utf8', function (err, data) {
+            if (err) throw err;
+            console.log('OK: ' + filename);
+            console.log(data)
+        });
 
-                var movieTitle = 'Title: ' + parsedVar.Title
-                var movieYear = 'Year: ' + parsedVar.Year
-                var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
-                var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
-                var movieCountry = 'Country: ' + parsedVar.Country
-                var movieLanguage = 'Language: ' + parsedVar.Language
-                var moviePlot = 'Plot: ' + parsedVar.Plot
-                var movieActors = 'Actors: ' + parsedVar.Actors
+        break;
+    default:
+        console.log('Please enter a request!');
+}
 
-                console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
-            });
-            break;
+function tweets () {
+    var params = {
+        screen_name: 'Bob_Brown18',
+        count: 20
+    };
+    client.get('statuses/user_timeline', params, function (error, tweets, response) {
+        if (!error) {
+            console.log('Here are your last 20 tweets: ');
+            var counter = 1;
+            for (var i = 0; i < tweets.length; i++) {
+                var element = tweets[i];
+                var twitterText = counter++ + '. ' + element.created_at + ' ' + element.text
+                console.log(twitterText);
+            }
         }
+    });
+}
 
-        var userInput = process.argv[3];
-        var editInput = userInput.replace(/\s/g, '+');
+function spotifyFun(arg) {
+    if (!arg) {
+        spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
+            .then(function (data) {
+                spotObj = {
+                    artists: data.artists[0].name,
+                    songName: data.name,
+                    songLink: data.preview_url,
+                    album: data.album.name
+                }
+                console.log(spotObj);
+            })
+            .catch(function (err) {
+                console.error('Error occurred: ' + err);
+            });
+        return;
+    }
 
-        requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
-            console.log('error:', error); // Print the error if one occurred
-            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    var params = {
+        type: 'track',
+        query: arg,
+        limit: 1
+    };
+    spotify.search(params, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        var spotifyArray = data.tracks.items;
+        var spotObj = {};
+        console.log("Here's some info on that song: ")
+        for (var i = 0; i < spotifyArray.length; i++) {
+            var element = spotifyArray[i],
+                spotObj = {
+                    artist: element.artists[0].name,
+                    songName: element.name,
+                    songLink: element.preview_url,
+                    album: element.album.name
+                }
+            console.log(spotObj);
+        }
+    });
+}
 
+function movieFun (arg) {
+    if (!arg) {
+
+        requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=Mr.+Nobody', function (error, response, body) {
+          
             var parsedVar = JSON.parse(body);
 
-            if (parsedVar.Response === 'False') {
-                console.log("IMDB can't find this movie, please try again")
-                return
-            }
-         
             var movieTitle = 'Title: ' + parsedVar.Title
             var movieYear = 'Year: ' + parsedVar.Year
             var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
-            if (parsedVar.Ratings[1]) {
             var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
-            }
             var movieCountry = 'Country: ' + parsedVar.Country
             var movieLanguage = 'Language: ' + parsedVar.Language
             var moviePlot = 'Plot: ' + parsedVar.Plot
@@ -124,11 +119,32 @@ switch (process.argv[2]) {
 
             console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
         });
-        break;
+        return;
+    }
 
-    case 'do_what_it_says':
-        console.log('says');
-        break;
-    default:
-        console.log('Please enter a request!');
+    var userInput = arg;
+    var editInput = userInput.replace(/\s/g, '+');
+
+    requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
+     
+        var parsedVar = JSON.parse(body);
+
+        if (parsedVar.Response === 'False') {
+            console.log("IMDB can't find this movie, please try again")
+            return
+        }
+     
+        var movieTitle = 'Title: ' + parsedVar.Title
+        var movieYear = 'Year: ' + parsedVar.Year
+        var movieIMDBRating = 'IMDB Rating: ' + parsedVar.imdbRating
+        if (parsedVar.Ratings[1]) {
+        var movieRTRatings = 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value
+        }
+        var movieCountry = 'Country: ' + parsedVar.Country
+        var movieLanguage = 'Language: ' + parsedVar.Language
+        var moviePlot = 'Plot: ' + parsedVar.Plot
+        var movieActors = 'Actors: ' + parsedVar.Actors
+
+        console.log(movieTitle, movieYear, movieIMDBRating, movieRTRatings, movieCountry, movieLanguage, moviePlot, movieActors);
+    });
 }
